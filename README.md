@@ -1,5 +1,30 @@
 # Distributed-Systems
 Assignment for Distributed Systems Module - 4th Year Software Development
+Ríona Greally - G00325504
 
-##### Ríona Greally - G00325504
-#### An Asynchronous RMI Dictionary Service
+### An Asynchronous RMI Dictionary Service
+
+
+##### Run the Application 
+
+    Download the job-server.war and the dictionary-service.jar files from github
+
+    In the CMD, direct to the folder where the JAR file is located and run the following command:
+
+	          java -jar dictionary-service.jar
+
+    The CMD shout output "server ready"
+
+            
+
+    Paste the WAR file into the webapps folder of Tomcat directory.
+
+    In a seperate CMD, direct rto the bin folder of the Tomcat Server Folder
+    and enter "startup" to activate the Tomcat server.
+
+    Open a browser and go to:
+
+          	localhost:8080/job-server
+
+    The aplication should be up and running now!
+    To close down Tomcat enter the command "shutdown" in the CMD
