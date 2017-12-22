@@ -4,6 +4,26 @@ Ríona Greally - G00325504
 
 ### An Asynchronous RMI Dictionary Service
 
+Client is running on Tomcat Server v9. The Client enters a word to search the dictionary.
+
+The word is then passed through to a remote object on a remote server to search the dictionary. 
+The user will recieve the result but will not have direct access to the dictionary file and the implementation is hidden from the user.
+
+	NOTE: dictionary.csv only contains 50 words for example some are:
+
+	Allure
+	Alter
+	Babble
+	Bachelor
+	Backboard
+	Cabin
+	Cable
+	Each
+	Gain
+	Hang
+	Jug
+	Laboratories
+	Laboratory
 
 ##### Run the Application 
 
