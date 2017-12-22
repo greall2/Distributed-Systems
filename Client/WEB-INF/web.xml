@@ -5,20 +5,13 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-  <display-name>Software Development Year 4 - Advanced Object Oriented Design Principles and Patterns</display-name>
+  <display-name>Distributed Systems - Software Development Yr4</display-name>
   <description>
-     2017 Assignment - A JEE Application for Measuring Document Similarity.
+   An Asynchronous RMI Dictionary Service
 
-     Make sure you encapsulate any environmental variables like system paths, connection strings, class names
-     and the like in this deployment descriptor. These can be configured as context-param elements and then
-     read and initialised by a start-up servlet.
   </description>
 
   <!-- A context is a variable with application wide scope. These can be accessed easily in a Servlet or JSP page-->
-  <context-param>
-    <param-name>SOME_GLOBAL_OR_ENVIRONMENTAL_VARIABLE</param-name>
-    <param-value>Some Value</param-value>
-  </context-param>
 
   <context-param>
     <param-name>SERVER_ADDRESS</param-name>

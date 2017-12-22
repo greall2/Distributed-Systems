@@ -1,6 +1,6 @@
 <%@ include file="includes/header.jsp" %>
 <!--Apdapted from Advanced Object Orientated Programme Module-->
-<div class="animated bounceInDown" style="font-size:32pt; font-family:arial; color:#990000; font-weight:bold">Dictionary Service</div>
+<div class="animated bounceInDown" style="font-size:32pt; font-family:arial; color:#000A99; font-weight:bold">Dictionary Service</div>
 
 </p>&nbsp;</p>&nbsp;</p>
 

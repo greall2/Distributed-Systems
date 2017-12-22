@@ -1,13 +1,11 @@
 package ie.gmit.sw;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.rmi.*;
 import java.rmi.server.*;
-import java.util.HashMap;
 import java.util.Map;
+
 public class DictionaryServiceImpl extends UnicastRemoteObject implements DictionaryService {
 	private static final long serialVersionUID = 1L;
 
@@ -18,12 +16,17 @@ public class DictionaryServiceImpl extends UnicastRemoteObject implements Dictio
 		d = dr.loadDict();
 	}
 
+	
+	
 	@Override
 	public String search(String word) throws RemoteException {
+		//checking if word entered is in the hashmap and returning the result if found
 		    String result = d.get(word);
 		    if(result != null)
 		    	return result;
-		    return "Word not found.";	    	 
+		    //Otherwise printing out the following if not
+		    return "String not found!";	    	 
+	
 	}
 	
 	

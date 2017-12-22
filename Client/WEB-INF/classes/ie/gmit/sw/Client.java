@@ -6,23 +6,32 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.rmi.Naming;
 import java.util.ArrayList;
+import java.util.*;
 
 //Apdapted from Advanced Object Orientated Programme Module
 
-public class Client {
+public class Client implements Runnable {
 
-    public Client(){}
+    private volatile Queue<Request> inqueue;
+	private Map<String, String> outqueue;
 
-	public String getDesc(String str) throws Exception {
-		//Ask the registry running on localhost and listening in port 1099 for the instance of
-		//the FileService object that is bound to the RMI registry with the name fileService.
-		DictionaryService ds = (DictionaryService) Naming.lookup("rmi://127.0.0.1:1099/dictionaryService");
+    public Client( Queue<Request> in, Map<String, String> out){
 
-		//Make a remote method invocation to ask for the list of files
-		//The ArrayList of file names is transferred over the network in serialized form
-		String desc = ds.search(str);
+        this.inqueue = in;
+		this.outqueue = out;
+    }
 
-		return desc;
+    @Override
+	public void run() { 
+
+        while(true){
+
+            Request r = inqueue.poll();
+
+            if(r != null){
+                String result = r.doRequest();
+                outqueue.put(r.getTaskNumber(), result);
+            }
+        }
 	}
-
 }

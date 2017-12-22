@@ -13,29 +13,23 @@ import java.util.Queue;
 //Apdapted from Advanced Object Orientated Programme Module
 
 public class ServiceHandler extends HttpServlet {
-	/* Declare any shared objects here. For example any of the following can be handled from 
-	 * this context by instantiating them at a servlet level:
-	 *   1) An Asynchronous Message Facade: declare the IN and OUT queues or MessageQueue
-	 *   2) An Chain of Responsibility: declare the initial handler or a full chain object
-	 *   1) A Proxy: Declare a shared proxy here and a request proxy inside doGet()
-	 */
 
-	/*****
-	DON'T FORGET TO DELETE
-	******/
-	Boolean test = false;
-
-	private String environmentalVariable = null; //Demo purposes only. Rename this variable to something more appropriate
 	private static long jobNumber = 0;
+
+
+	private static volatile Queue<Request> inQueue = new LinkedList<Request>();
+	private static Map<String, String> outQueue = new LinkedHashMap<String, String>();
+	private Thread 	client = new Thread(new Client(inQueue, outQueue));
 
 
 	// Run on servlet class initialized.
 	public void init() throws ServletException {
 		ServletContext ctx = getServletContext(); //The servlet context is the application itself.
 		
-		//Reads the value from the <context-param> in web.xml. Any application scope variables 
-		//defined in the web.xml can be read in as follows:
-		environmentalVariable = ctx.getInitParameter("SOME_GLOBAL_OR_ENVIRONMENTAL_VARIABLE"); 
+	
+		if (!client.isAlive()){
+			client.start();
+		}
 	}
 
 
@@ -46,51 +40,29 @@ public class ServiceHandler extends HttpServlet {
 		PrintWriter out = resp.getWriter(); 
 		String str = req.getParameter("searchStr");
 		String taskNumber = req.getParameter("frmTaskNumber");
+		String result = outQueue.get(taskNumber);
+		int counter = 1;
 		
-		//We could use the following to track asynchronous tasks. Comment it out otherwise...
+		//Tracking asynchronous tasks
 		if (taskNumber == null){
 			taskNumber = new String("T" + jobNumber);
 			jobNumber++;
-
-			int counter = 1;
-
-			/*if (req.getParameter("counter") != null){
-				counter = Integer.parseInt(req.getParameter("counter"));
-				counter++;
-			}*/
-
-			printLoadingPage(out, str, taskNumber, counter);						
+			Request request = new Request(taskNumber, str);
+			inQueue.offer(request);
+			printLoadingPage(out, str, taskNumber, counter);				
 			
-			//Add job to in-queue
 		}else{
-			//RequestDispatcher dispatcher = req.getRequestDispatcher("/poll");
-			//dispatcher.forward(req,resp);
-			
-			//Check out-queue for finished job with the given taskNumber
-			
-			//Let's pretend for now.
-			if(test)
-			{
-				Client c = new Client();
-				String result = null;
-				try{
-					result = c.getDesc(str);
-				} catch(Exception e){
-					result = "Uh oh";
-				}
+		
+			if(result !=null)
+			{	
 				printResultPage(out, str, taskNumber, result);	
-			}else{
-
-				test = true;
-				int counter = 1;
-
+			} else{
 				if (req.getParameter("counter") != null){
 					counter = Integer.parseInt(req.getParameter("counter"));
 					counter++;
 				}
-
 				printLoadingPage(out, str, taskNumber, counter);	
-			}					
+			}				
 		}
 	}
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -116,23 +88,21 @@ public class ServiceHandler extends HttpServlet {
 	public void printLoadingPage(PrintWriter out, String str, String taskNumber, Integer counter){
 		printHeader(out);
 		//Output some headings at the top of the generated page
-		out.print("<H1>Processing request for Job#: " + taskNumber + "</H1>");
+		out.print("<H1> Request for Task#: " + taskNumber + "</H1>");
 		out.print("<H3>String: " + str + "</H3>");
-		//Output some useful information for you (yes YOU!)
+		
 		out.print("<div id=\"r\"></div>");
-		//We can also dynamically write out a form using hidden form fields. The form itself is not
-		//visible in the browser, but the JavaScript below can see it.
 		out.print("<form name=\"frmRequestDetails\" action=\"doProcess\">");
 		out.print("<input name=\"searchStr\" type=\"hidden\" value=\"" + str + "\">");
 		out.print("<input name=\"frmTaskNumber\" type=\"hidden\" value=\"" + taskNumber + "\">");
 		out.print("<input name=\"counter\" type=\"hidden\" value=\"" + counter + "\">");
-		out.print("</form>");	
+		out.print("</form>");
 		printFooter(out);
 		printScript(out);
 	}
 	public void printResultPage(PrintWriter out, String str, String taskNumber, String result){
-		printHeader(out);
-		out.print("<H1>Searching: " + taskNumber + "</H1>");
+		out.print("<center>");
+		out.print("<H1>Found " + taskNumber + "</H1>");
 		out.print("<H3>Search query: " + str + "</H3>");
 		out.print(result);
 		out.print("<br><br><a class=\"button\" href=\"index.jsp\">Make Another Query</a>");
