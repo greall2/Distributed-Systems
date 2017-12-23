@@ -12,7 +12,7 @@ public class DictionaryServiceImpl extends UnicastRemoteObject implements Dictio
 	Map<String,String> d;
 	
 	public DictionaryServiceImpl() throws FileNotFoundException, IOException{
-		DictionaryReader dr = new DictionaryReader("dictionary.csv");
+		DictionaryReader dr = new DictionaryReader("/resources/dictionary.csv");
 		d = dr.loadDict();
 	}
 
